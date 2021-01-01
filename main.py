@@ -4,6 +4,9 @@ import vlc
 import os
 import datetime
 import time
+from datetime import date
+
+today = date.today()
 
 # Add default VLC directories for libvlc.dll
 
@@ -20,7 +23,7 @@ except FileNotFoundError:
 
 def calc_time():
     current_time = datetime.datetime.now  # Current Time for difference
-    target_time = datetime.datetime(2021, 1, 1, hour, minute, second)
+    target_time = datetime.datetime(int(today.strftime("%Y")), int(today.strftime("%m")), int(today.strftime("%d")), hour, minute, second)
 
     return (target_time - current_time()).total_seconds()
 
