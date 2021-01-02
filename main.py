@@ -21,6 +21,14 @@ except FileNotFoundError:
     pass
 
 
+def skip_vid():
+    if hour == givenHour:
+        if minute > givenMin:
+            time_to_skip = float(calc_time())
+            media.set_time(int(time_to_skip*1000))
+            print(f"Movie Skipped {time_to_skip} Seconds")
+
+
 def calc_time():
     current_time = datetime.datetime.now  # Current Time for difference
     target_time = datetime.datetime(int(today.strftime("%Y")), int(today.strftime("%m")), int(today.strftime("%d")), hour, minute, second)
@@ -28,12 +36,16 @@ def calc_time():
     return (target_time - current_time()).total_seconds()
 
 
-file = "C:/Users/Dipu/Videos/Movavi Video Editor/Preview Files/k.mkv"
+file = "E:/Movies/ww.mkv"
 
 media = vlc.MediaPlayer(file)
 
 # Party Time
-hour, minute, second = 18, 5, 0
+print(f"Please input Party Time")
+hour, minute = list(map(int, input('Enter a time in future: HH:MM (24-Hour): ').strip().split(':')))
+givenHour = hour
+givenMin = minute
+second = 0
 
 media.play()
 media.set_pause(True)
@@ -44,16 +56,18 @@ media.set_time(0)
 try:
     time.sleep(calc_time())
 except ValueError:
-    hour, minute = list(map(int, input('Enter a time in future: HH:MM (24-Hour):\n').strip().split(':')))
-    print(calc_time())
+    time.sleep(2)
+    hour, minute = list(map(int, input('Enter a time in future: HH:MM (24-Hour): ').strip().split(':')))
+    print(f"Movie Starts in : {calc_time()}")
+    skip_vid()
     time.sleep(calc_time())
 
 # Video length in seconds
 video_length = media.get_length() / 1000
 
-print(video_length)
+print(f"Movie length in: {video_length}")
 video_length /= 2
-print(video_length)
+print(f"Movie Interval Time in: {video_length}")
 media.set_fullscreen(True)
 
 # Play for one Hour
