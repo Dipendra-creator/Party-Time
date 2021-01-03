@@ -23,8 +23,9 @@ except FileNotFoundError:
 
 def skip_vid():
     if hour == givenHour:
-        if minute > givenMin:
-            time_to_skip = float(calc_time())
+        if finalminute > givenMin:
+            startInTime = float(calc_time())
+            time_to_skip = startInTime+((finalminute-givenMin)*60)
             media.set_time(int(time_to_skip*1000))
             print(f"Movie Skipped {time_to_skip} Seconds")
 
@@ -42,7 +43,7 @@ media = vlc.MediaPlayer(file)
 
 # Party Time
 print(f"Please input Party Time")
-hour, minute = list(map(int, input('Enter a time in future: HH:MM (24-Hour): ').strip().split(':')))
+hour, minute = list(map(int, input('Initial Party Time: HH:MM (24-Hour): ').strip().split(':')))
 givenHour = hour
 givenMin = minute
 second = 0
@@ -58,6 +59,7 @@ try:
 except ValueError:
     time.sleep(2)
     hour, minute = list(map(int, input('Enter a time in future: HH:MM (24-Hour): ').strip().split(':')))
+    finalminute = minute
     print(f"Movie Starts in : {calc_time()}")
     skip_vid()
     time.sleep(calc_time())
