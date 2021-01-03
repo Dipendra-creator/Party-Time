@@ -21,18 +21,21 @@ except FileNotFoundError:
     pass
 
 
-def skip_vid():
-    if hour == givenHour:
-        if finalminute > givenMin:
-            startInTime = float(calc_time())
-            time_to_skip = startInTime+((finalminute-givenMin)*60)
-            media.set_time(int(time_to_skip*1000))
-            print(f"Movie Skipped {time_to_skip} Seconds")
+class skip:
+    @staticmethod
+    def skip_vid():
+        if finalhour == givenHour:
+            if finalminute > givenMin:
+                startInTime = float(calc_time())
+                time_to_skip = startInTime + ((finalminute - givenMin) * 60)
+                media.set_time(int(time_to_skip * 1000))
+                return time_to_skip
 
 
 def calc_time():
     current_time = datetime.datetime.now  # Current Time for difference
-    target_time = datetime.datetime(int(today.strftime("%Y")), int(today.strftime("%m")), int(today.strftime("%d")), hour, minute, second)
+    target_time = datetime.datetime(int(today.strftime("%Y")), int(today.strftime("%m")), int(today.strftime("%d")),
+                                    hour, minute, second)
 
     return (target_time - current_time()).total_seconds()
 
@@ -59,9 +62,11 @@ try:
 except ValueError:
     time.sleep(2)
     hour, minute = list(map(int, input('Enter a time in future: HH:MM (24-Hour): ').strip().split(':')))
+    finalhour = hour
     finalminute = minute
     print(f"Movie Starts in : {calc_time()}")
-    skip_vid()
+    vartts = skip.skip_vid()
+    print(f"Movie Skipped {vartts} Seconds")
     time.sleep(calc_time())
 
 # Video length in seconds
@@ -69,12 +74,12 @@ video_length = media.get_length() / 1000
 
 print(f"Movie length in: {video_length}")
 video_length /= 2
-print(f"Movie Interval Time in: {video_length}")
+print(f"Movie Interval Time in: {video_length-vartts}")
 media.set_fullscreen(True)
 
 # Play for one Hour
 media.play()
-time.sleep(video_length)
+time.sleep(video_length-vartts)
 
 
 # define the countdown func.
